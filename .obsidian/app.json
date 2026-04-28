@@ -1,5 +1,5 @@
 {
-  "useMarkdownLinks": true,
+  "useMarkdownLinks": false,
   "newLinkFormat": "relative",
   "promptDelete": false,
   "showLineNumber": true,

@@ -60,3 +60,12 @@ bridge-domain 20
 - 主机IP路由通告
 	
     在分布式网关场景中，要实现跨子网主机的三层互访，两端VTEP（作为三层网关）需要互相学习主机IP路由。作为BGP EVPN对等体的VTEP之间通过交换MAC/IP路由，可以相互通告已经获取到的主机IP路由。其中，IP Address字段为主机IP路由的目的地址，同时MPLS Label2字段必须携带三层VNI。此时的MAC/IP路由也称为IRB（Integrated Routing and Bridge）类型路由。
+
+
+| Link Type                                  | 作用                           | 场景                                      |
+| ------------------------------------------ | ---------------------------- | --------------------------------------- |
+| Type-1：  <br>Ethernet Auto-Discovery Route | 向其他的PE通告本端的PE对接入站点的MAC地址是否可达 | 主要用在快速收敛、冗余模式。水平分割场景，解决多归属网络中的流量负载分担问题。 |
+| Type-2：  <br>MAC/IP Advertisement Route    | 站点的MAC和IP等信息通告               | 减少广播流和带宽资源的浪费                           |
+| Type-3：  <br>inclusive Multicast Route     | 发送多播地址可达信息来实现广播域内的成员互相发现     | 创建隧道的属性                                 |
+| Type-4：  <br>Ethernet Segment Route        | 连接到相同CE和PE设备之间相互自动发现         | DF选举                                    |
+| Type-5：  <br>IP Prefix Route               | EVPN网络接入外部网络                 | IP前缀的形式通告引用的外部路由                        |

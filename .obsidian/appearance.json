@@ -2,5 +2,6 @@
   "theme": "moonstone",
   "interfaceFontFamily": "微软雅黑",
   "monospaceFontFamily": "Consolas",
-  "textFontFamily": "微软雅黑"
+  "textFontFamily": "微软雅黑",
+  "accentColor": ""
 }
