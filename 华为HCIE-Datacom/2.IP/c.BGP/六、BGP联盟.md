@@ -17,10 +17,11 @@ AS1、AS2  联盟子AS
 [AR2-bgp]peer 3.3.3.3 ebgp-max-hop 10 
 ```
  
-
 对于建立的EBGP邻居，默认情况下设备会使用联盟AS号访问对方  
 对于建立联盟子AS的EBGP邻居，需要事先指定联盟子AS的邻居AS号  
+```
 [AR2-bgp]confederation peer-as 2    指定AS 2 为联盟子AS号
+```
 
 
 
