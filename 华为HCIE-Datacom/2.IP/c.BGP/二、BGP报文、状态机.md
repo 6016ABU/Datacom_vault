@@ -1,3 +1,6 @@
+---
+BGP: 报文、状态机
+---
 # BGP的状态机：  
 1.idle：初始化状态，等待邻居建立的使能事件（管理员手工指定建立的操作）  
 2.connet：连接状态，发起TCP连接  
@@ -21,7 +24,7 @@
    可以发送notification报文断开邻居关系  
    或者接口notification报文断开邻居关系
 
-![](assets/三、BGP报文、状态机/file-20260506095435740.png)
+![](assets/二、BGP报文、状态机/file-20260506101703270.png)
  
 # BGP的报文类型：  
 BGP的所有报文都是==单播==的  
@@ -34,48 +37,30 @@ BGP的所有报文都是==单播==的
 
  报文内容  
    1.open报文：发现邻居、建立邻居的           
-![](assets/三、BGP报文、状态机/file-20260506095626179.png)
+![](assets/二、BGP报文、状态机/file-20260506101703262.png)
 
-
-   2.keepalive报文：维护邻居的  
-      周期60s发送一次，180s邻居失效  
+ 2.keepalive报文：维护邻居的  
+ 周期60s发送一次，180s邻居失效  
 ```
 [AR1] display bgp peer 2.2.2.2 verbose # 查看bgp 邻居详细信息  
 [AR1-bgp]timer keepalive 30 hold 90   # 修改BGP通告的keepalive时间  
 ```
 两端时间不同，不影响邻居的正常建立  
 时间不同，会进行协商，协商为小的值
-![](assets/三、BGP报文、状态机/file-20260506100023236.png)
-
-
+![](assets/二、BGP报文、状态机/file-20260506101703254.png)
    3.notification报文：用于通知错误，断开邻居的连接  
-               
-```
-
-![Exported image](Exported%20image%2020251206164547-3.png)   
-```
+![](assets/二、BGP报文、状态机/file-20260506101703246.png)
 ----------------------------以上为建立BGP对等体期间发送的报文--------------------------
+
+ 4.update报文：用于路由信息的通告、撤销
+![](assets/二、BGP报文、状态机/file-20260506101703245.png)
+ 5.route-refresh报文：用于路由信息的请求       
+![](assets/二、BGP报文、状态机/file-20260506101703243.png)
 ```
- 
-```
-   3.update报文：用于路由信息的通告、撤销
+<AR1>refresh bgp all import  # 发送route-refresh报文请求对端的路由信息  
+<AR2>refresh bgp all export  # 直接发送updata报文给对端路由信息
 ```
 
-![Exported image](Exported%20image%2020251206164549-4.png)
-
-```
-         
-   4.route-refresh报文：用于路由信息的请求       
-```
-
-![Exported image](Exported%20image%2020251206164550-5.png)
-
-```
-         \<AR1\>refresh bgp all import  发送route-refresh报文请求对端的路由信息  
-         \<AR2\>refresh bgp all export  直接发送updata报文给对端路由信息
-```
-
-```
+### 注意：
 无论是ibgp还是ebgp，谁先使能bgp，谁就先发起TCP请求，  
 建立完成后，发起方会发送Open报文，对端收到之后，会请求断开TCP，对端再发起ＴＣＰ，然后一直用下去
-```
