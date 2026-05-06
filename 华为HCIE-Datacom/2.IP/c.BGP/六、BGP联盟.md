@@ -1,19 +1,18 @@
   ==联邦（Confederation）==
 
+![](assets/六、BGP联盟/file-20260506142220680.png)
 
 AS 100    联盟AS  
 AS1、AS2  联盟子AS
-
-
-  
+![600](assets/六、BGP联盟/file-20260506142241332.png)
 
 ```
 联盟的邻居建立：  
 [AR1]bgp 1     
-[AR1-bgp]confederation id 100    指定联盟AS的ID  
-[AR1-bgp]peer 2.2.2.2 as-number 1    建立联盟子AS内的IBGP邻居  
+[AR1-bgp]confederation id 100   # 指定联盟AS的ID  
+[AR1-bgp]peer 2.2.2.2 as-number 1   # 建立联盟子AS内的IBGP邻居  
 [AR1-bgp]peer 2.2.2.2 con LoopBack 0   
-[AR2-bgp]peer 3.3.3.3 as-number 2    建立联盟子AS间的EBGP邻居  
+[AR2-bgp]peer 3.3.3.3 as-number 2   # 建立联盟子AS间的EBGP邻居  
 [AR2-bgp]peer 3.3.3.3 connect-interface LoopBack 0  
 [AR2-bgp]peer 3.3.3.3 ebgp-max-hop 10 
 ```
