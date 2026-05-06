@@ -24,7 +24,7 @@ BGP: 报文、状态机
    可以发送notification报文断开邻居关系  
    或者接口notification报文断开邻居关系
 
-![](assets/二、BGP报文、状态机/file-20260506101703270.png)
+![](assets/2、BGP报文、状态机/file-20260506143931405.png)
  
 # BGP的报文类型：  
 BGP的所有报文都是==单播==的  
@@ -37,7 +37,7 @@ BGP的所有报文都是==单播==的
 
  报文内容  
    1.open报文：发现邻居、建立邻居的           
-![](assets/二、BGP报文、状态机/file-20260506101703262.png)
+![](assets/2、BGP报文、状态机/file-20260506143931409.png)
 
  2.keepalive报文：维护邻居的  
  周期60s发送一次，180s邻居失效  
@@ -47,15 +47,15 @@ BGP的所有报文都是==单播==的
 ```
 两端时间不同，不影响邻居的正常建立  
 时间不同，会进行协商，协商为小的值
-![](assets/二、BGP报文、状态机/file-20260506101703254.png)
+![](assets/2、BGP报文、状态机/file-20260506143931411.png)
    3.notification报文：用于通知错误，断开邻居的连接  
-![](assets/二、BGP报文、状态机/file-20260506101703246.png)
+![](assets/2、BGP报文、状态机/file-20260506143931416.png)
 ----------------------------以上为建立BGP对等体期间发送的报文--------------------------
 
  4.update报文：用于路由信息的通告、撤销
-![](assets/二、BGP报文、状态机/file-20260506101703245.png)
+![](assets/2、BGP报文、状态机/file-20260506143931420.png)
  5.route-refresh报文：用于路由信息的请求       
-![](assets/二、BGP报文、状态机/file-20260506101703243.png)
+![](assets/2、BGP报文、状态机/file-20260506143931422.png)
 ```
 <AR1>refresh bgp all import  # 发送route-refresh报文请求对端的路由信息  
 <AR2>refresh bgp all export  # 直接发送updata报文给对端路由信息

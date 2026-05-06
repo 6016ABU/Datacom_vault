@@ -1,10 +1,10 @@
   ==联邦（Confederation）==
 
-![](assets/六、BGP联盟/file-20260506142220680.png)
+![](assets/6、BGP联盟/file-20260506143942465.png)
 
 AS 100    联盟AS  
 AS1、AS2  联盟子AS
-![600](assets/六、BGP联盟/file-20260506142241332.png)
+![600](assets/6、BGP联盟/file-20260506143942463.png)
 
 ```
 联盟的邻居建立：  
