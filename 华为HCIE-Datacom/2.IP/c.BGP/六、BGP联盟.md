@@ -23,8 +23,6 @@ AS1、AS2  联盟子AS
 [AR2-bgp]confederation peer-as 2    指定AS 2 为联盟子AS号
 ```
 
-
-
 联盟内的路由传递：  
 从联盟AS-EBGP邻居学习到的路由，传递给联盟AS内的IBGP邻居 或 联盟AS间的EBGP邻居 都需要修改下一跳使得路由可达
 
