@@ -36,6 +36,41 @@ BGP 联盟（也叫 BGP 联邦）是与路由反射器 RR 并列的、解决 IBG
 
 # 实验测试
 如图：AR1-AR5在同一个联盟当中，AR1-2在子-AS65534中，AR3-AR4在子-AS65535中，AR5在子-AS65533中，AR6为其他联盟中。
-1. AR1import-dirr
+1. AR1import-direct，100.1.1.1/32
+2. AR6import-direct，100.2.2.2/32
 ![500](assets/6、BGP联盟/file-20260506160827420.png)
+
+各配置如下：
+AR1：
+```
+bgp 65534
+ router-id 1.1.1.1
+ confederation id 100
+ peer 2.2.2.2 as-number 65534 
+ peer 2.2.2.2 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  import-route direct
+  peer 2.2.2.2 enable
+```
+
+AR2：
+AR2为联盟内子AS的ASBR，相对于AR1多出了，confederation peer-a's
+```
+bgp 65534
+ router-id 2.2.2.2
+ confederation id 100
+ confederation peer-as 65535
+ peer 1.1.1.1 as-number 65534 
+ peer 1.1.1.1 connect-interface LoopBack0
+ peer 3.3.3.3 as-number 65535 
+ peer 3.3.3.3 ebgp-max-hop 10 
+ peer 3.3.3.3 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  peer 1.1.1.1 enable
+  peer 3.3.3.3 enable
+```
 
