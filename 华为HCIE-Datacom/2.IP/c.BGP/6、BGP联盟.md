@@ -56,7 +56,7 @@ bgp 65534
 ```
 
 AR2：
-AR2为联盟内子AS的ASBR，相对于AR1多出了，confederation peer-a's
+AR2为联盟内子AS的ASBR，相对于AR1多出了，confederation peer-as ，以及 ebgp通过loopback 接口简历bgp 邻居的 多跳。
 ```
 bgp 65534
  router-id 2.2.2.2
@@ -74,3 +74,25 @@ bgp 65534
   peer 3.3.3.3 enable
 ```
 
+AR3：
+AR3有两个联盟内的EBGP邻居，所以 confederation peer-as 65534 65533，有多个peer
+```
+bgp 65535
+ router-id 3.3.3.3
+ confederation id 100
+ confederation peer-as 65534 65533
+ peer 2.2.2.2 as-number 65534 
+ peer 2.2.2.2 ebgp-max-hop 10 
+ peer 2.2.2.2 connect-interface LoopBack0
+ peer 4.4.4.4 as-number 65535 
+ peer 4.4.4.4 connect-interface LoopBack0
+ peer 5.5.5.5 as-number 65533 
+ peer 5.5.5.5 ebgp-max-hop 10 
+ peer 5.5.5.5 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  peer 2.2.2.2 enable
+  peer 4.4.4.4 enable
+  peer 5.5.5.5 enable
+```
