@@ -35,14 +35,14 @@ BGP 联盟（也叫 BGP 联邦）是与路由反射器 RR 并列的、解决 IBG
 ==对于所有发出联盟AS的路由 都会清空携带的联盟子AS编号==
 
 # 实验测试
-##拓扑
+### 拓扑
 如图：AR1-AR5在同一个联盟当中，AR1-2在子-AS65534中，AR3-AR4在子-AS65535中，AR5在子-AS65533中，AR6为其他联盟中。
 1. AR1import-direct，100.1.1.1/32
 2. AR6import-direct，100.2.2.2/32 
 ![500](assets/6、BGP联盟/file-20260506160827420.png)
 
-各配置如下：
-AR1：
+### 各配置如下：
+#### AR1：
 ```
 bgp 65534
  router-id 1.1.1.1
@@ -56,7 +56,7 @@ bgp 65534
   peer 2.2.2.2 enable
 ```
 
-AR2：
+#### AR2：
 AR2为联盟内子AS的ASBR，相对于AR1多出了，confederation peer-as ，以及 ebgp通过loopback 接口简历bgp 邻居的 多跳。
 ```
 bgp 65534
@@ -75,7 +75,7 @@ bgp 65534
   peer 3.3.3.3 enable
 ```
 
-AR3：
+#### AR3：
 AR3有两个联盟内的EBGP邻居，所以 confederation peer-as 65534 65533，有多个peer
 ```
 bgp 65535
@@ -98,7 +98,7 @@ bgp 65535
   peer 5.5.5.5 enable
 ```
 
-AR5：
+#### AR5：
 
 ```
 bgp 65533
@@ -117,7 +117,7 @@ bgp 65533
   peer 10.1.56.6 enable
 ```
 
-AR6:
+#### AR6:
 AR6为其他联盟的设备，与AS100联盟建立邻居，只需要通过与AS100之间建立，而不用通过与子-AS建立。
 ```
 bgp 200
@@ -134,4 +134,7 @@ bgp 200
 ![700](assets/6、BGP联盟/file-20260506164032927.png)
 
 但是对联盟外，以联盟AS号展示
-![](assets/6、BGP联盟/file-20260506164216768.png)
+![700](assets/6、BGP联盟/file-20260506164216768.png)
+
+在AR1上查看bgp路由，100.2.2.2/32的AS-Path是经过外部联盟as和内部联盟的子AS号
+![700](assets/6、BGP联盟/file-20260506164443610.png)
