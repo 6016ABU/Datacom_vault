@@ -130,6 +130,7 @@ bgp 200
   peer 10.1.56.5 enable
 ```
 
+### BGP联盟中AS-Path属性的特点
 联盟中的AS-Path通过**小括号**来包含，
 ![700](assets/6、BGP联盟/file-20260506164032927.png)
 
