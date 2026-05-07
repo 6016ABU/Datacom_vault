@@ -3,9 +3,9 @@ BGP: 路由属性
 ---
 # 一、路径属性分类：  
 1.公认必遵：所有设备必须识别，且必须携带的属性  
-   1.as-path   2.origin   3.nexthop  
+   1.as-path   2.origin   3.nexthop
 2.公认任意：所有设备必须识别，根据自身的需求选择是否携带该属性  
-   1.Local_Preference  2.Atomic_aggregate   
+   1.Local_Preference  2.Atomic_aggregate
 3.可选过渡：所有设备可以不识别该属性，但是收到该属性后可以传递给其他邻居  
    1.Aggregator   2.Community  
 4.可选非过渡：所有设备可以不识别该属性，收到该属性后不可以传递给其他邻居  
