@@ -7,10 +7,10 @@ BGP: 路由属性
 2.公认任意：所有设备必须识别，根据自身的需求选择是否携带该属性  
    1.Local_Preference  2.Atomic_aggregate
 3.可选过渡：所有设备可以不识别该属性，但是收到该属性后可以传递给其他邻居  
-   1.Aggregator   2.Community  
+   1.Aggregator   2.Community
 4.可选非过渡：所有设备可以不识别该属性，收到该属性后不可以传递给其他邻居  
    1.MED     2.Cluster-List   3.Originator-ID 
-
+   
 ```
 [AR5]dis bgp routing-table peer 10.1.56.6 advertised-routes 100.5.8.5 # 查看发送给邻居路由时，添加的详细信息
 ```
@@ -32,7 +32,8 @@ BGP: 路由属性
 [AR7-route-policy]if-match ip-prefix test  
 [AR7-route-policy]apply as-path 800 200 additive  # 添加     
 [AR7]bgp 700  
-[AR7-bgp]peer 10.1.67.6 route-policy AS import  # 策略是入方向，则会立即生效（因为设备会主动发送route-refresh报文请求）
+[AR7-bgp]peer 10.1.67.6 route-policy AS import  # 策略是入方向，则会立即生效
+	（因为设备会主动发送route-refresh报文请求）
 ```
  
 #### 清空  
