@@ -93,16 +93,13 @@ TCP能够正常建立那BGP就可以正常建立
 
 
 ### 通过环回口建立EBGP邻居关系  
-==环回口事先通过静态或IGP打通==  
+==环回口事先通过静态或IGP打通==
 ```
 [AR3]bgp 100  
 [AR3-bgp]peer 4.4.4.4 as-number 200   
 [AR3-bgp]peer 4.4.4.4 connect-interface LoopBack 0  
 [AR3-bgp]peer 4.4.4.4 ebgp-max-hop 2  # 设置EBGP邻居的最大跳数为2
 ```
-
-   
-
 
 如图拓扑：理想情况是：AS内部使用IBGP+IGP，AS之间使用EBGP。  
 现在出现以下疑问：  

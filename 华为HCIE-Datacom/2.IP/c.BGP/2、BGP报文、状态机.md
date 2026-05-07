@@ -10,7 +10,7 @@ BGP: 报文、状态机
            2.TCP连接成功，进入到opensent状态，并发送open报文  
    2.连接成功，进入到opensent状态，并发送open报文  
 3.opensent：等待对端的open报文  
-   1.open报文协商失败 （Router id要求邻居不能一致），发送notification报文退回至idle状态  
+   1.open报文协商失败 （Router id要求邻居不能一致），发送notification报文退回至idle状态
 ```
 [AR1-bgp]router-id 10.1.1.1 
 ```
