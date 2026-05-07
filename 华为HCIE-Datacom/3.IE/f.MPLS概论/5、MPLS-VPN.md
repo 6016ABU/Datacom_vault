@@ -157,9 +157,9 @@ AR3（PE设备）进行数据的处理（再封装）
 	2.根据LDP协议为公网路由分发的公网标签，执行封装
 
 **动态标签分发：**
-	1.LDP协议  
-	2.MP-BGP协议  
-	3.RSVP-TE协议
+	1.LDP协议  (公网标签)
+	2.MP-BGP协议  （私网标签）
+	3.RSVP-TE协议 
  
 **在MPLS VPN网络中：**  
 LDP协议一般用于公网IGP进行公网标签的分配  
@@ -172,109 +172,3 @@ MP-BGP协议一般用于私网站点进行私网标签的分配
  
 ==公网设备（P设备）无法在IP路由表存在私网路由信息，所以也无法处理私网标签信息==
 
-```mermaid
-flowchart TD
-    %% 节点样式定义
-    classDef startend fill:#E8F4F8,stroke:#2B7BBA,stroke-width:2px,rounded:10px;
-    classDef action fill:#E8FBF2,stroke:#00B894,stroke-width:2px,rounded:8px;
-    classDef table fill:#F5F0FF,stroke:#6C5CE7,stroke-width:2px,rounded:8px;
-    classDef judge fill:#FFF9E6,stroke:#F39C12,stroke-width:2px,rounded:8px;
-    classDef state fill:#FFE8F5,stroke:#D63384,stroke-width:2px,rounded:8px;
-
-    %% 流程起始
-    A0([MPLS VPN 控制平面流程开始]):::startend
-
-    %% ======================
-    %% 阶段1：骨干网公网LSP隧道预建立（IGP+LDP）
-    %% ======================
-    subgraph 阶段1：骨干网公网LSP隧道预建立
-        direction TB
-        %% 泳道：PE1、P、PE2 公网设备
-        subgraph 公网设备PE1
-            A1[公网接口使能MPLS、MPLS LDP\n发布Loopback0与公网网段路由到IGP]:::action
-            A2[IGP收敛完成，生成全局RIB公网路由表]:::table
-            A3[从全局RIB提取生成全局FIB公网转发表]:::table
-            A4[与直连邻居建立LDP会话，会话进入Operational状态]:::state
-            A5[为Loopback0 FEC分配本地入标签，接收邻居标签映射]:::action
-            A6[生成LIB标签信息库]:::table
-            A7[从LIB提取有效条目，生成LFIB标签转发表]:::table
-        end
-
-        subgraph 公网设备P
-            B1[公网接口使能MPLS、MPLS LDP\n发布Loopback0与公网网段路由到IGP]:::action
-            B2[IGP收敛完成，生成全局RIB公网路由表]:::table
-            B3[从全局RIB提取生成全局FIB公网转发表]:::table
-            B4[与直连邻居建立LDP会话，会话进入Operational状态]:::state
-            B5[为Loopback0 FEC分配本地入标签，接收邻居标签映射]:::action
-            B6[生成LIB标签信息库]:::table
-            B7[从LIB提取有效条目，生成LFIB标签转发表]:::table
-        end
-
-        subgraph 公网设备PE2
-            C1[公网接口使能MPLS、MPLS LDP\n发布Loopback0与公网网段路由到IGP]:::action
-            C2[IGP收敛完成，生成全局RIB公网路由表]:::table
-            C3[从全局RIB提取生成全局FIB公网转发表]:::table
-            C4[与直连邻居建立LDP会话，会话进入Operational状态]:::state
-            C5[为Loopback0 FEC分配本地入标签，接收邻居标签映射]:::action
-            C6[生成LIB标签信息库]:::table
-            C7[从LIB提取有效条目，生成LFIB标签转发表]:::table
-            C8[与PE1基于Loopback0建立MP-BGP VPNv4对等体]:::state
-        end
-
-        %% 阶段1内部连线
-        A0 --> A1 & B1 & C1
-        A1 --> A2 --> A3 --> A4 --> A5 --> A6 --> A7
-        B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7
-        C1 --> C2 --> C3 --> C4 --> C5 --> C6 --> C7 --> C8
-        A7 -->|PE1与PE2完成公网端到端LSP打通| C8
-    end
-
-    %% ======================
-    %% 阶段2：VPN私网路由端到端学习与发布
-    %% ======================
-    subgraph 阶段2：VPN私网路由端到端学习与发布
-        direction TB
-        %% 泳道：CE-A、PE1、PE2、CE-B
-        subgraph 用户边缘CE-A（站点A）
-            D1[将本地私网网段192.168.1.0/24发布给PE1]:::action
-        end
-
-        subgraph 运营商边缘PE1
-            E1[入接口绑定VPN1实例，接收CE-A私网路由]:::action
-            E2[将私网路由存入VPN1实例的VRF RIB路由表]:::table
-            E3[为私网路由添加RD 100:1，转换为VPNv4路由\n分配内层VPN标签，绑定Export RT 100:100]:::action
-            E4[生成BGP VPNv4路由表]:::table
-            E5[通过MP-BGP将VPNv4路由发布给PE2]:::action
-        end
-
-        subgraph 运营商边缘PE2
-            F1[通过MP-BGP接收PE1发布的VPNv4路由]:::action
-            F2{校验路由Export RT与本地VPN1 Import RT是否匹配?}:::judge
-            F3[剥离RD，还原为纯IPv4私网路由\n将内层VPN标签存入LIB]:::action
-            F4[将私网路由导入VPN1实例的VRF RIB路由表]:::table
-            F5[从VRF RIB提取生成VPN1的VRF FIB转发表]:::table
-            F6[将私网路由发布给直连的CE-B]:::action
-        end
-
-        subgraph 用户边缘CE-B（站点B）
-            G1[接收PE2发布的站点A私网路由，生成本地路由表]:::action
-        end
-
-        %% 阶段2内部连线
-        D1 --> E1
-        E1 --> E2 --> E3 --> E4 --> E5
-        E5 --> F1
-        F1 --> F2
-        F2 -->|匹配通过| F3 --> F4 --> F5 --> F6
-        F2 -->|匹配失败| F7[丢弃该VPNv4路由，不导入VRF]:::action
-        F6 --> G1
-    end
-
-    %% 流程结束
-    H0([控制平面流程结束\n公网LSP隧道打通，私网路由端到端学习完成\n所有转发所需表项全部生成]):::startend
-    G1 --> H0
-
-    %% 反向流程标注（站点B→站点A路由发布）
-    H1[注：站点B→站点A的私网路由发布流程完全对称]
-    H0 --> H1
-```
