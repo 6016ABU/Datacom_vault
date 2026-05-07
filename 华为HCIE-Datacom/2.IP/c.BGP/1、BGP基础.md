@@ -58,9 +58,8 @@ BGP：边界 网关协议
 2.EBGP邻居：AS之间建立的BGP邻居关系
 
 ```
-#  
-bgp 100  
- #  
+bgp 100
+ #
  ipv4-family unicast  
   undo synchronization   # 撤销同步
 ```
