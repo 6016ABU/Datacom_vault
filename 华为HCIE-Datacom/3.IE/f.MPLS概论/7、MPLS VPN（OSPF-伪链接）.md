@@ -45,10 +45,10 @@ Ext-Community:OSPF DOMAIN ID \<0.0.0.0 : 0\>, OSPF RT \<0.0.0.0 : 5 : 1\>, OSPF 
 ==在PE设备之间构建sham-link（伪链接），通过伪链接建立区域0的邻接关系== 
 以此完成两个站点区域的直接相连（即可以直接传递1类LSA）
 ### **sham-link的配置：**  
-	1.两端站点的PE存在一个站点（绑定VPN实例）地址用于建立sham-link  
-	2.建立sham-link的地址相互通信  
-		该地址不能在ospf站点内宣告，而是要通过VPNv4路由通告  
-	3.两端PE学习路由后，进行sham-link的建立  
+1. 两端站点的PE存在一个站点（绑定VPN实例）地址用于建立sham-link  
+2. 建立sham-link的地址相互通信  
+	该地址不能在ospf站点内宣告，而是要通过VPNv4路由通告  
+3. 两端PE学习路由后，进行sham-link的建立  
 ```D
 [AR2-ospf-1-area-0.0.0.0]sham-link 100.1.24.2 100.1.24.4  
 [AR4-ospf-1-area-0.0.0.0]sham-link 100.1.24.4 100.1.24.2
