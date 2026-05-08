@@ -180,7 +180,7 @@ bgp 100
     10.0.45.5
 ```
 
-查看ASBR1从对端
+查看ASBR1从对端ASBR2学习到的路由
 ```
 [ASBR1]dis bgp vpnv4 all routing-table 192.168.2.0
 
@@ -213,3 +213,7 @@ bgp 100
  AS-path 100, origin igp, pref-val 0, valid, external, best, select, active, pre 255
  Not advertised to any peer yet
 ```
+
+会发现：
+1. ASBR1从本端PE1学习到的VPNv4路由会在VPN-Instance B中通告给ASBR2
+2. ASBR1从对端ASBR2学习到的IPv4路由会在
