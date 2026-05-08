@@ -1,40 +1,16 @@
-**前置的配置：**
-AS内底层配置IGP互通（ospf ，isis），  
-全局使能MPLS LDP  
-接口使能mpls， mpls ldp
+# **配置详解：**
+1. 底层使用IGP互联互通（OSPF，ISIS）
+2. 配置LDP协议，PE，P，ASBR之间都需要配置
+3. PE与CE之间通过IGP或者EBGP传递路由
+4. PE与ASBR之间建立MP-BGP邻居关系（VPNv4），无RR场景
+5. ASBR创建VRF，配置RD，RT
+6. 两个ASBR之间建立MP-BGP邻居关系（VPN-Instance），互联接口绑定VPN-Instance
 
-**方案配置：**
-1.同一个AS内的PE与ASBR之间建立MP-BGP邻居（VPNv4）  
-2.ASBR之间的接口绑定实例，并建立实例BGP邻居
+## 拓扑：
 ![](assets/12、Option-A/file-20251211000044410.png)
-**具体关键配置：AS10内：**
-PE1：
-``` 
-ip vpn-instance A  
- ipv4-family  
-  route-distinguisher 100:1  
-  vpn-target 1:1 export-extcommunity  
-  vpn-target 1:1 import-extcommunity  
-#  
-bgp 10  
- peer 4.4.4.4 as-number 10   
- peer 4.4.4.4 connect-interface LoopBack0  
- #  
- ipv4-family unicast  
-  undo peer 4.4.4.4 enable  
- #   
- ipv4-family vpnv4  
-  policy vpn-target  
-  peer 4.4.4.4 enable  
- #  
- ipv4-family vpn-instance A   
-  network 192.168.1.0   
-#  
-ospf 2 router-id 2.2.2.2 vpn-instance A  
- import-route bgp  
- area 0.0.0.0 
-```
-**AS10：ASBR1： **
+****
+## 关键配置：
+### ASBR1
 ```
 ip vpn-instance B  
  ipv4-family  
@@ -43,8 +19,8 @@ ip vpn-instance B
   vpn-target 1:1 import-extcommunity  
 #  
 interface GigabitEthernet0/0/1  
- ip binding vpn-instance B  
- ip address 10.0.45.4 255.255.255.0   
+ ip binding vpn-instance B
+ ip address 10.0.45.4 255.255.255.0
 #  
 bgp 10  
  peer 2.2.2.2 as-number 10   
@@ -61,35 +37,7 @@ bgp 10
   peer 10.0.45.5 as-number 100   
 #
 ```
-AS 100内 ：  PE2：
-```
-#  
-ip vpn-instance C  
- ipv4-family  
-  route-distinguisher 200:1  
-  vpn-target 1:1 export-extcommunity  
-  vpn-target 1:1 import-extcommunity  
-#  
-bgp 100  
- peer 5.5.5.5 as-number 100   
- peer 5.5.5.5 connect-interface LoopBack0  
- #  
- ipv4-family unicast  
-  undo peer 5.5.5.5 enable  
- #   
- ipv4-family vpnv4  
-  policy vpn-target  
-  peer 5.5.5.5 enable  
- #  
- ipv4-family vpn-instance C   
-  network 192.168.2.0   
-#  
-ospf 2 router-id 2.7.7.7 vpn-instance C  
- import-route bgp  
- area 0.0.0.0   
-#
-```
- AS 100 内：ASBR2：
+### ASBR2：
 ```
 ip vpn-instance D  
  ipv4-family  
@@ -116,7 +64,7 @@ bgp 100
   peer 10.0.45.4 as-number 10   
 #
 ```
-### **控制平面：**
+## **控制平面：**
 如何从PC1去访问PC2：
 1.CE2与PE2之间建立OSPF邻居关系，通过G0/0/0绑定的VPN-Instance-C学习到192.168.2.1/24 路由条目，  
 2.为了让Site 1 学习到192.168.2.0/24  
