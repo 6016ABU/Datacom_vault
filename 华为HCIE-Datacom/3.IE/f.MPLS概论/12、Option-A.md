@@ -5,9 +5,8 @@
 4. PE与ASBR之间建立MP-BGP邻居关系（VPNv4），无RR场景
 5. ASBR创建VRF，配置RD，RT
 6. 两个ASBR之间建立MP-BGP邻居关系（VPN-Instance），互联接口绑定VPN-Instance
-
 ## 拓扑：
-![](assets/12、Option-A/file-20251211000044410.png)
+![700](assets/12、Option-A/file-20251211000044410.png)
 ****
 ## 关键配置：
 ### ASBR1
