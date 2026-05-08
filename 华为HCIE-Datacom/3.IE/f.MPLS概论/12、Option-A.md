@@ -1,4 +1,3 @@
-# Option-A
 **前置的配置：**
 AS内底层配置IGP互通（ospf ，isis），  
 全局使能MPLS LDP  
@@ -8,7 +7,7 @@ AS内底层配置IGP互通（ospf ，isis），
 1.同一个AS内的PE与ASBR之间建立MP-BGP邻居（VPNv4）  
 2.ASBR之间的接口绑定实例，并建立实例BGP邻居
 ![](assets/12、Option-A/file-20251211000044410.png)
-**具体关键配置：AS10内： **
+**具体关键配置：AS10内：**
 PE1：
 ``` 
 ip vpn-instance A  
