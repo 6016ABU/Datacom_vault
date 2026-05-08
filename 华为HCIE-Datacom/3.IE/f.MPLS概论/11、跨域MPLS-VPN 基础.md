@@ -20,7 +20,7 @@ OptionA 采用 ASBR 之间背靠背的解决方案
 3.AS 越多维护起来越麻烦。
 
 ### **OptionB 方案:**  
-只需要在 ASBR 与 ASBR 之间创建一个 VPNV4 的邻居关系,然后关闭掉==ASBR ==上针对于 policy vpn-target 的配置,并且记得在 ASBR 之间开启 MPLS 功能就 ok 了。 
+只需要在 ASBR 与 ASBR 之间创建一个 VPNV4 的邻居关系,然后关闭掉==ASBR ==上针对于 policy vpn-target 的配置,并且记得在 ASBR 之间的==接口开启 MPLS ==功能就 ok 了。 
 在 OptionB 方案中，公网标签的作用是找到本 AS 的 ASBR 设备
 **私网标签的作用是:** 
 1.让本端 ASBR 设备能够通过这个标签找到对方 ASBR 设备  
