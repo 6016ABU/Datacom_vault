@@ -3,7 +3,7 @@
 2. 配置LDP协议，PE，P，ASBR之间都需要配置
 3. PE与CE之间通过IGP或者EBGP传递路由
 4. PE与ASBR之间建立MP-BGP邻居关系（VPNv4），无RR场景
-5. ASBR1与ASBR2之间建立MP-BGP邻居关系（VPNv4），取消RT值校验
+5. ASBR1与ASBR2之间建立MP-EBGP邻居关系（VPNv4），取消RT值校验
 6. ASBR1与ASBR2互联接口使能mpls
 
 ![](assets/13、Option-B/file-20251211000824757.png)
