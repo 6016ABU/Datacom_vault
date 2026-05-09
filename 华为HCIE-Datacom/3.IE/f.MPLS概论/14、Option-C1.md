@@ -191,7 +191,7 @@ PC1访问PC2：
 
 
 # 输出详解
-LSP解释：
+### LSP解释：
 1. 2.2.2.2/32为本端通告network通告的路由，所有分配1025标签
 2. 7.7.7.7/32为对端ASBR2通告给本端的路由，分配给本端的标签为1024，本端ASBR1再重新为改路由分配1027标签。
 ```
@@ -212,4 +212,17 @@ FEC                In/Out Label  In/Out IF                      Vrf Name
 3.3.3.3/32         1024/3        -/GE0/0/0                                     
 2.2.2.2/32         NULL/1025     -/GE0/0/0                                     
 2.2.2.2/32         1026/1025     -/GE0/0/0 
+```
+
+### tracert 路径标签显示
+```
+<CE1>tracert -v -a 192.168.1.254 192.168.2.254
+ traceroute to  192.168.2.254(192.168.2.254), max hops: 30 ,packet length: 40,press CTRL_C to break 
+ 1 10.0.12.2 20 ms  10 ms  10 ms 
+ 2 10.0.23.3[MPLS Label=1024/1027/1026 Exp=0/0/0 S=0/0/1 TTL=1/1/1] 60 ms  50 ms  50 ms 
+ 3 10.0.34.4[MPLS Label=1027/1026 Exp=0/0 S=0/1 TTL=1/2] 60 ms  50 ms  60 ms 
+ 4 10.0.45.5[MPLS Label=1024/1026 Exp=0/0 S=0/1 TTL=1/3] 50 ms  50 ms  50 ms 
+ 5 10.0.56.6[MPLS Label=1024/1026 Exp=0/0 S=0/1 TTL=1/4] 50 ms  40 ms  40 ms 
+ 6 10.0.78.7 40 ms  50 ms  50 ms 
+ 7 10.0.78.8 50 ms  50 ms  40 ms 
 ```
