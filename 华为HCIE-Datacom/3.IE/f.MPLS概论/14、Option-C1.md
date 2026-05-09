@@ -2,8 +2,10 @@
 1. 底层使用IGP互联互通（OSPF，ISIS）
 2. 配置LDP协议，PE，P，ASBR之间都需要配置
 3. PE与CE之间通过IGP或者EBGP传递路由
-4. PE、P、ASBR之间建立MP-BGP邻居关系（VPNv4），无RR场景
-5. ASBR1与ASBR2之间建立MP-EBGP邻居关系（VPNv4），取消RT值校验
+4. 同一个AS内部PE、P、ASBR之间建立RR-IBGP邻居关系
+5. ASBR1与ASBR2之间建立EBGP邻居关系
+	1. network通告本端PE的Loopback地址
+	2. 对从
 6. ASBR1与ASBR2互联接口使能mpls
 
 
@@ -52,7 +54,6 @@ ospf 2 router-id 2.2.2.2 vpn-instance A
 ```
 ASBR1：
 ```
-#  
 bgp 10  
  peer 2.2.2.2 as-number 10   
  peer 2.2.2.2 connect-interface LoopBack0  
