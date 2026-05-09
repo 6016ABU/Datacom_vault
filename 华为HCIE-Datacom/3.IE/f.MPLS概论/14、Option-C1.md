@@ -216,7 +216,8 @@ FEC                In/Out Label  In/Out IF                      Vrf Name
 
 ### tracert 路径标签显示
 **三层标签如何而来**
-1. 
+1. 例如CE1访问CE2，CE1查看路由表将报文发送给PE1
+2. PE1接收到报文，查看目的地址192.168.2.254
 ```
 <CE1>tracert -v -a 192.168.1.254 192.168.2.254
  traceroute to  192.168.2.254(192.168.2.254), max hops: 30 ,packet length: 40,press CTRL_C to break 
