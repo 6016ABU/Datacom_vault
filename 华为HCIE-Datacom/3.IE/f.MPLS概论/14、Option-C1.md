@@ -216,8 +216,33 @@ FEC                In/Out Label  In/Out IF                      Vrf Name
 
 ### tracert 路径标签显示
 **三层标签如何而来**
-1. 例如CE1访问CE2，CE1查看路由表将报文发送给PE1
-2. PE1接收到报文，查看目的地址192.168.2.254，查找路由表
+1. 例如CE1访问CE2，CE1查看路由表将报文发送给PE1的VRF-A
+2. PE1接收到报文，根据目的ip地址查看路由表，发现需要relay到7.7.7.7
+```
+<PE1>display ip routing-table vpn-instance A
+Route Flags: R - relay, D - download to fib
+------------------------------------------------------------------------------
+Routing Tables: A
+         Destinations : 6        Routes : 6        
+
+Destination/Mask    Proto   Pre  Cost      Flags NextHop         Interface
+    192.168.2.0/24  EBGP    255  3          RD   7.7.7.7         GigabitEthernet0/0/1
+```
+3. 于是查看去往7.7.7.7的路由表，发现还要relay到4.4.4.4
+```
+<PE1>display ip routing-table 7.7.7.7
+Route Flags: R - relay, D - download to fib
+------------------------------------------------------------------------------
+Routing Table : Public
+Summary Count : 1
+Destination/Mask    Proto   Pre  Cost      Flags NextHop         Interface
+        7.7.7.7/32  IBGP    255  2          RD   4.4.4.4         GigabitEthernet0/0/1
+```
+4. 
+
+
+
+
 ```
 <CE1>tracert -v -a 192.168.1.254 192.168.2.254
  traceroute to  192.168.2.254(192.168.2.254), max hops: 30 ,packet length: 40,press CTRL_C to break 
