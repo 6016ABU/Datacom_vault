@@ -73,7 +73,6 @@ Route-policy 2 permit node 10
 ```
 PE2  
 ```
-#  
 ip vpn-instance C  
  ipv4-family  
   route-distinguisher 200:1  
@@ -106,7 +105,6 @@ ospf 2 router-id 2.7.7.7 vpn-instance C
 ```
 ASBR2：
 ```
-#  
 bgp 100  
  peer 7.7.7.7 as-number 100   
  peer 7.7.7.7 connect-interface LoopBack0  
@@ -159,7 +157,7 @@ PC1访问PC2：
 [PE1]display mpls lsp
 ![](assets/14、Option-C1/file-20251211001429701.png)  
 
-5.问题来了：有去往7.7.7.7的标签，但是下一跳该走哪里？￼因为7.7.7.7路由时ASBR1在BGP引入到OSPF中，所以：要去查看公共路由表
+5.问题来了：有去往7.7.7.7的标签，但是下一跳该走哪里？因为7.7.7.7路由时ASBR1在BGP引入到OSPF中，所以：要去查看公共路由表
 [PE1]display ip routing-table 7.7.7.7
 ![](assets/14、Option-C1/file-20251211001437431.png)  
 
