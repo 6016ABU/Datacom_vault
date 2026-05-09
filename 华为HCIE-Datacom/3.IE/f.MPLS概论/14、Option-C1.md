@@ -3,25 +3,16 @@
 2. 配置LDP协议，PE，P，ASBR之间都需要配置
 3. PE与CE之间通过IGP或者EBGP传递路由
 4. 同一个AS内部PE、P、ASBR之间建立RR-IBGP邻居关系
-5. ASBR1与ASBR2之间建立EBGP邻居关系
+5. ASBR1与ASBR2之间建立EBGP邻居关系，关闭RT值校验
 	1. network通告本端PE的Loopback地址
 	2. 对来自本端PE的路由替换标签，使能标签路由能力
 	3. 对来自对端ASBR的路由分配标签，使能标签路由能力
 6. ASBR1与ASBR2互联接口使能mpls
 7. PE1与PE2建立MP-IBGP邻居关系（VPNv4）
 
-
-a 前置配置：  
-AS内底层配置IGP互通（ospf ，isis），全局使能MPLS LDP接口使能mpls， mpls ldp
- 
-方案配置：  
-1.配置同一AS内的PE与ASBR之间建立IBGP邻居  
-2.配置ASBR之间建立EBGP邻居
-3.配置PE建立MP-BGP邻居
-4.配置ASBR关闭VPN-Targe检查
-5.配置IBGP，EBGP邻居标签路由转发能力
-6.配置路由策略重分发MPLS 标签
+## 拓扑
  ![](assets/14、Option-C1/file-20251211001209765.png)
+### 配置
 **PE1  **
 ```
 ip vpn-instance A  
@@ -195,7 +186,32 @@ PC1访问PC2：
 ![](assets/14、Option-C1/file-20251211001556895.png)   
   
 
-11.数据包到达PE2时，pop公网标签，只剩下标签，然后PE2查表，1026标签时为VPN-Instance C标识，￼数据包从VPN-Instance绑定的接口发出
+11.数据包到达PE2时，pop公网标签，只剩下标签，然后PE2查表，1026标签时为VPN-Instance C标识，数据包从VPN-Instance绑定的接口发出
 ![](assets/14、Option-C1/file-20251211001629800.png) 
 ![](assets/14、Option-C1/file-20251211001635902.png)
 最后数据到达CE2，CE2查表，到网关，再到PC2
+
+
+# 输出详解
+LSP解释：
+1. 2.2.2.2/32为本端通告network通告的路由，所有分配1025标签
+2. 7.7.7.7/32为对端ASBR2通告给本端的路由，分配给本端的标签为1024，本端ASBR1再重新为改路由分配1027标签。
+```
+<ASBR1>dis mpls lsp
+-------------------------------------------------------------------------------
+                 LSP Information: BGP  LSP
+-------------------------------------------------------------------------------
+FEC                In/Out Label  In/Out IF                      Vrf Name       
+7.7.7.7/32         NULL/1024     -/-                                           
+2.2.2.2/32         1025/NULL     -/-                                           
+7.7.7.7/32         1027/1024     -/-                                           
+-------------------------------------------------------------------------------
+                 LSP Information: LDP LSP
+-------------------------------------------------------------------------------
+FEC                In/Out Label  In/Out IF                      Vrf Name       
+4.4.4.4/32         3/NULL        -/-                                           
+3.3.3.3/32         NULL/3        -/GE0/0/0                                     
+3.3.3.3/32         1024/3        -/GE0/0/0                                     
+2.2.2.2/32         NULL/1025     -/GE0/0/0                                     
+2.2.2.2/32         1026/1025     -/GE0/0/0 
+```
