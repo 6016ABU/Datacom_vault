@@ -1,12 +1,11 @@
-# Option-B
-前置配置：  
-AS内底层配置IGP互通（ospf ，isis），￼全局使能MPLS LDP接口使能mpls， mpls ldp
- 
-方案配置：  
-1.配置PE和域内ASBR间使用MP-IBGP  
-2.配置不同AS的ASBR间使用MP-EBGP  
-3.配置ASBR不对VPNv4路由进行VPN-target过滤  
-4.配置ASBR之间互联接口使能mpls
+# 配置详解
+1. 底层使用IGP互联互通（OSPF，ISIS）
+2. 配置LDP协议，PE，P，ASBR之间都需要配置
+3. PE与CE之间通过IGP或者EBGP传递路由
+4. PE与ASBR之间建立MP-BGP邻居关系（VPNv4），无RR场景
+5. ASBR1与ASBR2之间建立MP-BGP邻居关系（VPNv4），取消RT值校验
+6. ASBR1与ASBR2互联接口使能mpls
+
 ![](assets/13、Option-B/file-20251211000824757.png)
 
 ## 具体关键配置：AS10内： 
