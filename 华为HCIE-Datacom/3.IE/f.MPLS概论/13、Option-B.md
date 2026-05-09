@@ -71,3 +71,72 @@ bgp 100
  
 转发（数据）平面：
 区别：只是在ASBR之间是通过MPLS标签交换路由
+
+```
+<ASBR1>dis mpls lsp
+-------------------------------------------------------------------------------
+                 LSP Information: L3VPN  LSP
+-------------------------------------------------------------------------------
+FEC                In/Out Label  In/Out IF                      Vrf Name       
+192.168.2.0/24     1026/1026     -/-                            ASBR LSP       
+192.168.1.0/24     1027/1026     -/-                            ASBR LSP       
+-------------------------------------------------------------------------------
+                 LSP Information: LDP LSP
+-------------------------------------------------------------------------------
+FEC                In/Out Label  In/Out IF                      Vrf Name       
+3.3.3.3/32         NULL/3        -/GE0/0/0                                     
+3.3.3.3/32         1024/3        -/GE0/0/0                                     
+4.4.4.4/32         3/NULL        -/-                                           
+2.2.2.2/32         NULL/1025     -/GE0/0/0                                     
+2.2.2.2/32         1025/1025     -/GE0/0/0                                     
+```
+
+
+## 在ASBR上的路由通告
+```
+<ASBR1>dis bgp vpnv4 all routing-table 192.168.1.0
+
+
+ BGP local router ID : 10.0.34.4
+ Local AS number : 10
+
+ Total routes of Route Distinguisher(100:1): 1
+ BGP routing table entry information of 192.168.1.0/24:
+ Label information (Received/Applied): 1026/1027
+ From: 2.2.2.2 (10.0.23.2)
+ Route Duration: 00h07m50s  
+ Relay IP Nexthop: 10.0.34.3
+ Relay IP Out-Interface: GigabitEthernet0/0/0
+ Relay Tunnel Out-Interface: GigabitEthernet0/0/0
+ Relay token: 0x4
+ Original nexthop: 2.2.2.2
+ Qos information : 0x0
+ Ext-Community:RT <1 : 1>, OSPF DOMAIN ID <0.0.0.0 : 0>, 
+               OSPF RT <0.0.0.0 : 1 : 0>, OSPF ROUTER ID <2.2.2.2 : 0>
+ AS-path Nil, origin igp, MED 3, localpref 100, pref-val 0, valid, internal, best, select, pre 255, IGP cost 2
+ Advertised to such 1 peers:
+    10.0.45.5
+```
+
+```
+<ASBR1>dis bgp vpnv4 all routing-table 192.168.2.0
+
+
+ BGP local router ID : 10.0.34.4
+ Local AS number : 10
+
+ Total routes of Route Distinguisher(200:1): 1
+ BGP routing table entry information of 192.168.2.0/24:
+ Label information (Received/Applied): 1026/1026
+ From: 10.0.45.5 (10.0.56.5)
+ Route Duration: 00h08m26s  
+ Relay Tunnel Out-Interface: GigabitEthernet0/0/1
+ Relay token: 0x1
+ Original nexthop: 10.0.45.5
+ Qos information : 0x0
+ Ext-Community:RT <1 : 1>, OSPF DOMAIN ID <0.0.0.0 : 0>, 
+               OSPF RT <0.0.0.0 : 1 : 0>, OSPF ROUTER ID <2.7.7.7 : 0>
+ AS-path 100, origin igp, pref-val 0, valid, external, best, select, pre 255
+ Advertised to such 1 peers:
+    2.2.2.2
+```
