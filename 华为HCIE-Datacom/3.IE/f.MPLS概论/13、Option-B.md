@@ -8,33 +8,7 @@
 
 ![](assets/13、Option-B/file-20251211000824757.png)
 
-## 具体关键配置：AS10内： 
-```
-PE1：  
-ip vpn-instance A  
- ipv4-family  
-  route-distinguisher 100:1  
-  vpn-target 1:1 export-extcommunity  
-  vpn-target 1:1 import-extcommunity  
-#  
-bgp 10  
- peer 4.4.4.4 as-number 10   
- peer 4.4.4.4 connect-interface LoopBack0  
- #  
- ipv4-family unicast  
-  undo peer 4.4.4.4 enable  
- #   
- ipv4-family vpnv4  
-  policy vpn-target  
-  peer 4.4.4.4 enable  
- #  
- ipv4-family vpn-instance A   
-  network 192.168.1.0   
-#  
-ospf 2 router-id 2.2.2.2 vpn-instance A  
- import-route bgp  
- area 0.0.0.0 
-```
+## 具体关键配置：
 **ASBR1:  **
 ```
 interface GigabitEthernet0/0/1  
@@ -57,34 +31,7 @@ bgp 10
   peer 10.0.45.5 enable
 
 ```
-**AS 100内 ：PE2： **
-```
-#  
-ip vpn-instance C  
- ipv4-family  
-  route-distinguisher 200:1  
-  vpn-target 1:1 export-extcommunity  
-  vpn-target 1:1 import-extcommunity  
-#  
-bgp 100  
- peer 5.5.5.5 as-number 100   
- peer 5.5.5.5 connect-interface LoopBack0  
- #  
- ipv4-family unicast  
-  undo peer 5.5.5.5 enable  
- #   
- ipv4-family vpnv4  
-  policy vpn-target  
-  peer 5.5.5.5 enable  
- #  
- ipv4-family vpn-instance C   
-  network 192.168.2.0   
-#  
-ospf 2 router-id 2.7.7.7 vpn-instance C  
- import-route bgp  
- area 0.0.0.0   
-#
-```
+**AS 100内 ：
 ASBR2:
 ```
 #  
