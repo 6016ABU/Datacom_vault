@@ -5,8 +5,10 @@
 4. 同一个AS内部PE、P、ASBR之间建立RR-IBGP邻居关系
 5. ASBR1与ASBR2之间建立EBGP邻居关系
 	1. network通告本端PE的Loopback地址
-	2. 对从
+	2. 对来自本端PE的路由替换标签，使能标签路由能力
+	3. 对来自对端ASBR的路由分配标签，使能标签路由能力
 6. ASBR1与ASBR2互联接口使能mpls
+7. PE1与PE2建立MP-IBGP邻居关系（VPNv4）
 
 
 a 前置配置：  
