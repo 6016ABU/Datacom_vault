@@ -57,10 +57,9 @@ bgp 100
 ```
 
 ## **与Option-A的区别：
-1.ASBR之间建立VPNv4邻居  
-2.ASBR之间的接口不再绑定实例，  
-通过在接口上使能mpls，  
-以及在BGP下的ipv4-family vpnv4 undo policy vpn-target关闭掉 RT值的检测
+1.ASBR之间建立MP-EBGP邻居  
+2.ASBR之间的接口不再绑定实例，通过在接口上使能mpls，  
+以及在BGP下的ipv4-family vpnv4地址族下 undo policy vpn-target关闭掉 RT值的检测
  
 ==优点：减轻了ASBR的压力，不需要配置VPN-Instance来标记路由==
  
@@ -142,4 +141,17 @@ FEC                In/Out Label  In/Out IF                      Vrf Name
  AS-path 100, origin igp, pref-val 0, valid, external, best, select, pre 255
  Advertised to such 1 peers:
     2.2.2.2
+```
+
+## tracert路径
+```
+<CE1>tracert -v -a 192.168.1.254 192.168.2.254 
+ traceroute to  192.168.2.254(192.168.2.254), max hops: 30 ,packet length: 40,press CTRL_C to break 
+ 1 10.0.12.2 20 ms  20 ms  20 ms 
+ 2 10.0.23.3[MPLS Label=1024/1026 Exp=0/0 S=0/1 TTL=1/1] 40 ms  50 ms  40 ms 
+ 3  *  *  * 
+ 4  *  *  * 
+ 5 10.0.56.6[MPLS Label=1025/1026 Exp=0/0 S=0/1 TTL=1/1] 60 ms  40 ms  30 ms 
+ 6 10.0.78.7 50 ms  60 ms  50 ms 
+ 7 10.0.78.8 50 ms  60 ms  50 ms 
 ```
