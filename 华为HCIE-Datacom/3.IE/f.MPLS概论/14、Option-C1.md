@@ -214,35 +214,133 @@ FEC                In/Out Label  In/Out IF                      Vrf Name
 2.2.2.2/32         1026/1025     -/GE0/0/0 
 ```
 
-### tracert 路径标签显示
-**三层标签如何而来**
+
+### **三层标签如何而来**
 1. 例如CE1访问CE2，CE1查看路由表将报文发送给PE1的VRF-A
-2. PE1接收到报文，根据目的ip地址查看路由表，发现需要relay到7.7.7.7
+2. PE1接收到报文，根据目的ip地址查看路由表，发现需要relay到7.7.7.7，并且TunnelID不为0，需要标签
 ```
-<PE1>display ip routing-table vpn-instance A
+<PE1>display ip routing-table vpn-instance A 192.168.2.0 verbose 
 Route Flags: R - relay, D - download to fib
 ------------------------------------------------------------------------------
-Routing Tables: A
-         Destinations : 6        Routes : 6        
+Routing Table : A
+Summary Count : 1
 
-Destination/Mask    Proto   Pre  Cost      Flags NextHop         Interface
-    192.168.2.0/24  EBGP    255  3          RD   7.7.7.7         GigabitEthernet0/0/1
+Destination: 192.168.2.0/24
+     Protocol: EBGP             Process ID: 0
+   Preference: 255                    Cost: 3
+      NextHop: 7.7.7.7           Neighbour: 7.7.7.7
+        State: Active Adv Relied       Age: 00h08m25s
+          Tag: 0                  Priority: low
+        Label: 1026                QoSInfo: 0x0
+   IndirectID: 0x5              
+ RelayNextHop: 4.4.4.4           Interface: GigabitEthernet0/0/1
+     TunnelID: 0x5                   Flags: RD
 ```
-3. 于是查看去往7.7.7.7的路由表，发现还要relay到4.4.4.4
+
+3. 于是查看去往7.7.7.7的路由表，发现还要relay到4.4.4.4，并且TunnelID不为0，需要标签
 ```
-<PE1>display ip routing-table 7.7.7.7
+<PE1>display ip routing-table 7.7.7.7 verbose 
 Route Flags: R - relay, D - download to fib
 ------------------------------------------------------------------------------
 Routing Table : Public
 Summary Count : 1
-Destination/Mask    Proto   Pre  Cost      Flags NextHop         Interface
-        7.7.7.7/32  IBGP    255  2          RD   4.4.4.4         GigabitEthernet0/0/1
+
+Destination: 7.7.7.7/32
+     Protocol: IBGP             Process ID: 0
+   Preference: 255                    Cost: 2
+      NextHop: 4.4.4.4           Neighbour: 4.4.4.4
+        State: Active Adv Relied       Age: 00h09m43s
+          Tag: 0                  Priority: low
+        Label: 1027                QoSInfo: 0x0
+   IndirectID: 0x2              
+ RelayNextHop: 10.0.23.3         Interface: GigabitEthernet0/0/1
+     TunnelID: 0x3                   Flags: RD
 ```
-4. 
+4. 查看去往4.4.4.4的路由表，并且TunnelID不为0，需要标签，单不需要relay，说明下一跳能够之间到达
+```
+<PE1>display ip routing-table 4.4.4.4 verbose 
+Route Flags: R - relay, D - download to fib
+------------------------------------------------------------------------------
+Routing Table : Public
+Summary Count : 1
+
+Destination: 4.4.4.4/32
+     Protocol: OSPF             Process ID: 1
+   Preference: 10                     Cost: 2
+      NextHop: 10.0.23.3         Neighbour: 0.0.0.0
+        State: Active Adv              Age: 00h10m05s
+          Tag: 0                  Priority: medium
+        Label: NULL                QoSInfo: 0x0
+   IndirectID: 0x0              
+ RelayNextHop: 0.0.0.0           Interface: GigabitEthernet0/0/1
+     TunnelID: 0x3                   Flags:  D
+```
+5. 查看私网标签分配，去往192.168.2.0 分配了 **1026**
+```
+<PE1>display bgp vpnv4 all routing-table 192.168.2.0 
 
 
+ BGP local router ID : 10.0.23.2
+ Local AS number : 10
+
+ Total routes of Route Distinguisher(200:1): 1
+ BGP routing table entry information of 192.168.2.0/24:
+ Label information (Received/Applied): 1026/NULL
+ From: 7.7.7.7 (10.0.67.7)
+ Route Duration: 00h16m16s  
+ Relay IP Nexthop: 10.0.23.3
+ Relay IP Out-Interface: GigabitEthernet0/0/1
+ Relay Tunnel Out-Interface: GigabitEthernet0/0/1
+ Relay token: 0x5
+ Original nexthop: 7.7.7.7
+ Qos information : 0x0
+ Ext-Community:RT <1 : 1>, OSPF DOMAIN ID <0.0.0.0 : 0>, 
+               OSPF RT <0.0.0.0 : 1 : 0>, OSPF ROUTER ID <2.7.7.7 : 0>
+ AS-path 100, origin igp, MED 3, pref-val 0, valid, external, best, select, pre 255, IGP cost 2
+ Not advertised to any peer yet
 
 
+ VPN-Instance A, Router ID 10.0.23.2:
+
+ Total Number of Routes: 1
+ BGP routing table entry information of 192.168.2.0/24:
+ Label information (Received/Applied): 1026/NULL
+ From: 7.7.7.7 (10.0.67.7)
+ Route Duration: 00h16m16s  
+ Relay Tunnel Out-Interface: GigabitEthernet0/0/1
+ Relay token: 0x5
+ Original nexthop: 7.7.7.7
+ Qos information : 0x0
+ Ext-Community:RT <1 : 1>, OSPF DOMAIN ID <0.0.0.0 : 0>, 
+               OSPF RT <0.0.0.0 : 1 : 0>, OSPF ROUTER ID <2.7.7.7 : 0>
+ AS-path 100, origin igp, MED 3, pref-val 0, valid, external, best, select, active, pre 255, IGP cost 2
+ Not advertised to any peer yet
+```
+5. 查看MPLS LSP路径，公网，以及跨域LSP；公网分配**1024**，跨域分配**1027**
+```<PE1>display mpls lsp 
+-------------------------------------------------------------------------------
+                 LSP Information: BGP  LSP
+-------------------------------------------------------------------------------
+FEC                In/Out Label  In/Out IF                      Vrf Name       
+7.7.7.7/32         NULL/1027     -/-                                           
+192.168.1.0/24     1026/NULL     -/-                            A              
+-------------------------------------------------------------------------------
+                 LSP Information: LDP LSP
+-------------------------------------------------------------------------------
+FEC                In/Out Label  In/Out IF                      Vrf Name       
+3.3.3.3/32         NULL/3        -/GE0/0/1                                     
+3.3.3.3/32         1024/3        -/GE0/0/1                                     
+4.4.4.4/32         NULL/1024     -/GE0/0/1                                     
+4.4.4.4/32         1025/1024     -/GE0/0/1                                     
+2.2.2.2/32         3/NULL        -/-
+```
+6. 安装迭代路径，标签路径如下：
+```
+1024 # 公网标签
+1027 # 跨域标签
+1026 # 私网标签
+```
+### tracert 路径标签显示
 ```
 <CE1>tracert -v -a 192.168.1.254 192.168.2.254
  traceroute to  192.168.2.254(192.168.2.254), max hops: 30 ,packet length: 40,press CTRL_C to break 
@@ -254,3 +352,6 @@ Destination/Mask    Proto   Pre  Cost      Flags NextHop         Interface
  6 10.0.78.7 40 ms  50 ms  50 ms 
  7 10.0.78.8 50 ms  50 ms  40 ms 
 ```
+
+
+
