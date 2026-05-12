@@ -14,7 +14,9 @@
 
 ## 注意
 1. 对端PE和RR的loopback地址已经通过在ASBR的IGP进程中引入BGP路由学习到
-2. 所以PE和RR之间不用建立IBGP（uncast）邻居关系
+2. 所以PE和RR之间不用建立IBGP（unicast）邻居关系
+	1. 因为在OptionB中，需要建立IBGP（unicast）关系来传递对端PE和RR的loopback地址。
+3. 同样的本端RR与对端RR也不需要建立EBGP（unicast）邻居关系
 ## 拓扑
 
 ![](assets/16、Option-C2（RR）/file-20260512144545589.png)
