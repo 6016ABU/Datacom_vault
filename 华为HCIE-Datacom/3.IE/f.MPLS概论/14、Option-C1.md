@@ -456,7 +456,7 @@ bgp 100
   peer 3.3.3.3 enable
  #
  ipv4-family vpn-instance a 
-  network 100.1.1.1 255.255.255.255
+  network 100.1.1.1 255.255.255.255 
 ```
 
 ```
@@ -478,13 +478,15 @@ bgp 100
   peer 4.4.4.4 enable
   peer 4.4.4.4 reflect-client
   peer 4.4.4.4 label-route-capability
-  undo peer 6.6.6.6 enable
+  peer 6.6.6.6 enable
  # 
  ipv4-family vpnv4
   undo policy vpn-target
   peer 2.2.2.2 enable                     
   peer 2.2.2.2 reflect-client
-  peer 6.6.6.6 enabl
+  peer 2.2.2.2 next-hop-invariable 
+  peer 6.6.6.6 enable
+  peer 6.6.6.6 next-hop-invariable
 ```
 
 ```
@@ -496,6 +498,7 @@ bgp 100
  #
  ipv4-family unicast
   undo synchronization
+  network 2.2.2.2 255.255.255.255 
   network 3.3.3.3 255.255.255.255 
   peer 3.3.3.3 enable
   peer 3.3.3.3 route-policy 2 export
@@ -515,6 +518,7 @@ bgp 200
  ipv4-family unicast
   undo synchronization
   network 6.6.6.6 255.255.255.255 
+  network 7.7.7.7 255.255.255.255 
   peer 6.6.6.6 enable
   peer 6.6.6.6 route-policy 2 export
   peer 6.6.6.6 label-route-capability
@@ -522,6 +526,7 @@ bgp 200
   peer 10.1.45.4 route-policy 1 export
   peer 10.1.45.4 label-route-capability
 ```
+
 
 
 ```
