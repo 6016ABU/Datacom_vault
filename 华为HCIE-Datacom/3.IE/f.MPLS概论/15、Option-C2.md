@@ -11,12 +11,13 @@
 5. PE通告ASBR引入到IGP的路由学习到对端PE的loopback地址，建立多跳MP-EBGP（VPNv4）邻居
 
 ## 拓扑
-![](assets/15、Option-C2/file-20260512143127339.png)
+![](assets/15、Option-C2/file-20260512144817463.png)
 
 ## 详细配置
 ### PE1
 ```
 bgp 100
+ router-id 1.1.1.1
  peer 6.6.6.6 as-number 200 
  peer 6.6.6.6 ebgp-max-hop 255 
  peer 6.6.6.6 connect-interface LoopBack0
