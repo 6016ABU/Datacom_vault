@@ -1,12 +1,15 @@
-前置配置：  
-AS内底层配置IGP互通（ospf ，isis），全局使能MPLS LDP接口使能mpls， mpls ldp  
+## 配置详解
 
-关键配置：  
-ASBR间建立EBGP对等体关系  
-将域内PE的路由发布给远端PE  
-使能标签IPv4路由交换能力  
-为带标签的公网BGP路由建立LDP LSP  
-PE间建立MP-EBGP对等体关系
+1. 底层使用IGP互联互通（OSPF，ISIS）
+2. 配置LDP协议，PE，P，ASBR之间都需要配置
+3. PE与CE之间通过IGP或者EBGP传递路由
+4. ASBR之间建立EBGP（unicast）邻居
+	1. 通告本端PE的loopback地址
+	2. 在IGP（OSPF，ISIS）进程中引入BGP
+	3. 在MPLS视图下使能： lsp-trigger bgp-label-route  
+	4. 为ASBR传递给对端ASBR的BGP路由分配标签，并使能标签路由能力。
+5. PE通告ASBR引入到IGP的路由学习到对端PE的loopback地址，建立多跳MP-EBGP（VPNv4）邻居
+
 ![](assets/15、Option-C2/file-20251211002016828%202.png)
 **PE1  **
 ```
@@ -157,3 +160,19 @@ Route-policy 2 permit node 10
 
 6.数据包到达PE2，后公网标签弹出，PE2更具私网标签，将数包送到对应的接口
 ![](assets/15、Option-C2/file-20251211002016821.png)
+
+
+## 路径跟踪
+
+```
+<CE1>tracert -v -a 7.7.7.7 8.8.8.8
+ traceroute to  8.8.8.8(8.8.8.8), max hops: 30 ,packet length: 40,press CTRL_C to break 
+ 1 10.1.17.1 30 ms  20 ms  20 ms 
+ 2 10.1.12.2[MPLS Label=1024/1028 Exp=0/0 S=0/1 TTL=1/1] 50 ms  40 ms  40 ms 
+ 3 10.1.23.3[MPLS Label=1025/1028 Exp=0/0 S=0/1 TTL=1/2] 40 ms  50 ms  50 ms 
+ 4 10.1.34.4[MPLS Label=1025/1028 Exp=0/0 S=0/1 TTL=1/3] 50 ms  40 ms  40 ms 
+ 5 10.1.45.5[MPLS Label=1025/1028 Exp=0/0 S=0/1 TTL=1/4] 40 ms  30 ms  60 ms 
+ 6 10.1.68.6 40 ms  50 ms  50 ms 
+ 7 10.1.68.8 70 ms  50 ms  50 ms
+```
+

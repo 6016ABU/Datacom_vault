@@ -1,5 +1,5 @@
 
-# 一、PE之间建立多跳MP-EBGP邻居
+# PE之间建立多跳MP-EBGP邻居
 
 ## 配置详解
 1. 底层使用IGP互联互通（OSPF，ISIS）
