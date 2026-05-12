@@ -20,6 +20,7 @@
 	3. RR1与RR2之间ebgp-max-hop
 
 ## 拓扑
+![](assets/14、Option-C1（RR）/file-20260512103028311.png)
 
 注意：配置完底层IBGP和LDP分配公网标签后
 1. PE，RR，ASBR，之间先建立IBGP（Unicast）关系，使能标签路由的能力；然后ASBR用network通告PE和RR的loopback地址；并且配置标签策略。
