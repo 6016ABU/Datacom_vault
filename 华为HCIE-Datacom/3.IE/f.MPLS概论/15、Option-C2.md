@@ -11,7 +11,7 @@
 5. PE通告ASBR引入到IGP的路由学习到对端PE的loopback地址，建立多跳MP-EBGP（VPNv4）邻居
 
 ## 拓扑
-![](assets/15、Option-C2/file-20260512112856150.png)
+![](assets/15、Option-C2/file-20260512143127339.png)
 
 ## 详细配置
 ### PE1
