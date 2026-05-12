@@ -1,5 +1,5 @@
 前置配置：  
-AS内底层配置IGP互通（ospf ，isis），￼全局使能MPLS LDP￼接口使能mpls， mpls ldp  
+AS内底层配置IGP互通（ospf ，isis），全局使能MPLS LDP接口使能mpls， mpls ldp  
 
 关键配置：  
 ASBR间建立EBGP对等体关系  
