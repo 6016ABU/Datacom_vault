@@ -522,3 +522,16 @@ bgp 200
   peer 10.1.45.4 route-policy 1 export
   peer 10.1.45.4 label-route-capability
 ```
+
+
+```
+<CE1>tracert -v -a 100.1.1.1 100.2.2.2
+ traceroute to  100.2.2.2(100.2.2.2), max hops: 30 ,packet length: 40,press CTRL_C to break 
+ 1 10.1.12.2 40 ms  10 ms  10 ms 
+ 2 10.1.23.3[MPLS Label=1025/1027/1024 Exp=0/0/0 S=0/0/1 TTL=1/1/1] 60 ms  60 ms  40 ms 
+ 3 10.1.34.4[MPLS Label=1027/1024 Exp=0/0 S=0/1 TTL=1/2] 50 ms  50 ms  60 ms 
+ 4 10.1.45.5[MPLS Label=1027/1024 Exp=0/0 S=0/1 TTL=1/3] 50 ms  50 ms  50 ms 
+ 5 10.1.56.6[MPLS Label=1025/1024 Exp=0/0 S=0/1 TTL=1/4] 60 ms  70 ms  50 ms 
+ 6 10.1.78.7 50 ms  50 ms  60 ms 
+ 7 10.1.78.8 60 ms  60 ms  60 ms
+```
