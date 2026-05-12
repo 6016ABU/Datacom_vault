@@ -10,103 +10,80 @@
 	4. 为ASBR传递给对端ASBR的BGP路由分配标签，并使能标签路由能力。
 5. PE通告ASBR引入到IGP的路由学习到对端PE的loopback地址，建立多跳MP-EBGP（VPNv4）邻居
 
+## 拓扑
+
 ![](assets/15、Option-C2/file-20251211002016828%202.png)
-**PE1  **
+## 详细配置
+### PE1
 ```
-ip vpn-instance A  
- ipv4-family  
-  route-distinguisher 100:1  
-  vpn-target 1:1 export-extcommunity  
-  vpn-target 1:1 import-extcommunity
-ospf 2 router-id 2.2.2.2 vpn-instance A  
- import-route bgp  
- area 0.0.0.0   
-#  
-bgp 10  
- peer 7.7.7.7 as-number 100   
- peer 7.7.7.7 ebgp-max-hop 10   
- peer 7.7.7.7 connect-interface LoopBack0  
- #  
- ipv4-family unicast  
-  undo peer 7.7.7.7 enable  
- #   
- ipv4-family vpnv4  
-  policy vpn-target  
-  peer 7.7.7.7 enable  
- #  
- ipv4-family vpn-instance A   
-  network 192.168.1.0 
+bgp 100
+ peer 6.6.6.6 as-number 200 
+ peer 6.6.6.6 ebgp-max-hop 255 
+ peer 6.6.6.6 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  undo peer 6.6.6.6 enable
+ # 
+ ipv4-family vpnv4
+  policy vpn-target
+  peer 6.6.6.6 enable
+ #
+ ipv4-family vpn-instance a 
+  network 7.7.7.7 255.255.255.255 
 ```
- ASBR1：  
+### ASBR1
 ```
-#  
-bgp 10  
- peer 10.0.45.5 as-number 100   
- #  
- ipv4-family unicast  
-  network 2.2.2.2 255.255.255.255    
-  peer 10.0.45.5 enable  
-  peer 10.0.45.5 route-policy 2 export  
-  peer 10.0.45.5 label-route-capability  
- #   
- ipv4-family vpnv4  
-  undo policy vpn-target  
-#  
-ospf 1 r 1.4.4.4  
-   import-route bgp  
-#  
-interface GigabitEthernet0/0/1  
- ip address 10.0.45.4 255.255.255.0   
- mpls  
+bgp 100
+ router-id 3.3.3.3
+ peer 10.1.34.4 as-number 200 
+ #
+ ipv4-family unicast
+  undo synchronization
+  network 1.1.1.1 255.255.255.255 
+  peer 10.1.34.4 enable
+  peer 10.1.34.4 route-policy asbr export
+  peer 10.1.34.4 label-route-capability
 #  
 mpls  
  lsp-trigger bgp-label-route  
 #  
 Route-policy 2 permit node 10   
   apply mpls-label 
+# 
+interface GigabitEthernet0/0/1
+ ip address 10.1.34.3 255.255.255.0 
+ mpls
 ```
-PE2  
+### PE2  
 ```
-#  
-ip vpn-instance C  
- ipv4-family  
-  route-distinguisher 200:1  
-  vpn-target 1:1 export-extcommunity  
-  vpn-target 1:1 import-extcommunity  
-#  
-ospf 2 router-id 2.7.7.7 vpn-instance C  
- import-route bgp  
- area 0.0.0.0   
-#  
-bgp 100  
- peer 2.2.2.2 as-number 10   
- peer 2.2.2.2 ebgp-max-hop 10   
- peer 2.2.2.2 connect-interface LoopBack0  
- #  
- ipv4-family unicast  
-  undo peer 2.2.2.2 enable  
- #   
- ipv4-family vpnv4  
-  policy vpn-target  
-  peer 2.2.2.2 enable  
- #  
- ipv4-family vpn-instance C   
-  network 192.168.2.0 
+bgp 200
+ peer 1.1.1.1 as-number 100 
+ peer 1.1.1.1 ebgp-max-hop 255 
+ peer 1.1.1.1 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  undo peer 1.1.1.1 enable
+ # 
+ ipv4-family vpnv4
+  policy vpn-target
+  peer 1.1.1.1 enable
+ #
+ ipv4-family vpn-instance a 
+  network 8.8.8.8 255.255.255.255
 ```
-ASBR2：
+### ASBR2
 ```
-#  
-bgp 100  
- peer 10.0.45.4 as-number 10   
- #  
- ipv4-family unicast  
-  network 7.7.7.7 255.255.255.255   
-  peer 10.0.45.4 enable  
-  peer 10.0.45.4 route-policy 2 export  
-  peer 10.0.45.4 label-route-capability  
- #   
- ipv4-family vpnv4  
-  undo policy vpn-target  
+bgp 200
+ peer 10.1.34.3 as-number 100 
+ #
+ ipv4-family unicast
+  undo synchronization
+  network 6.6.6.6 255.255.255.255 
+  peer 10.1.34.3 enable
+  peer 10.1.34.3 route-policy asbr export
+  peer 10.1.34.3 label-route-capability
 #  
 ospf 1 r 1.5.5.5  
    import-route bgp  
