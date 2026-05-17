@@ -110,7 +110,7 @@ bgp 100
  peer 2.2.2.2 connect-interface LoopBack0
  peer 4.4.4.4 as-number 100 
  peer 4.4.4.4 connect-interface LoopBack0
- peer 6.6.6.6 as-number 200 
+	 peer 6.6.6.6 as-number 200 
  peer 6.6.6.6 ebgp-max-hop 255 
  peer 6.6.6.6 connect-interface LoopBack0
  #
