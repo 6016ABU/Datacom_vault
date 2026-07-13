@@ -123,7 +123,7 @@ AR5：
 1.值得注意的是：ping 的时候需要指定ip地址，不然它缺省使用接口地址去ping
 ![](assets/1、MPLS概论/file-20260519155351657.png)  
 
-2.查看fib表：tunnel 值不为0
+2.查看fib表：tunnel（隧道id）值不为0，表示标签转发。值为零，表示IP转发。
   ![](assets/1、MPLS概论/file-20260519155351649.png)
 
 3.查看静态mpls-lsp
