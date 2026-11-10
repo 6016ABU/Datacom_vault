@@ -84,8 +84,8 @@ MAC 漂移定义：**同一个 VLAN 里，同一个 MAC 地址被交换机从两
 [S3]mac-address flapping detection exclude vlan \<1-4094\> 排除某些 VLAN 不做漂移检测（比如 VRRP 主备切换的 VLAN，VRRP 切换本身是正常 MAC 漂移，不需要告警阻断）
 [S3]interface GigabitEthernet 0/0/2  
 [S3-GigabitEthernet0/0/2]mac-address flapping trigger 接口发生MAC地址漂移后的处理
-														error-down 接口shutdown ，（端口逻辑关闭，端口 down 掉，所有 VLAN 全部断流），隔离环路
-														quit-vlan 接口退出VLAN ，其他 VLAN 不受影响（损伤更小，推荐多 VLAN 场景）
+									error-down 接口shutdown ，（端口逻辑关闭，端口 down 掉，所有 VLAN 全部断流），隔离环路
+									quit-vlan 接口退出VLAN ，其他 VLAN 不受影响（损伤更小，推荐多 VLAN 场景）
 ```
 
 
