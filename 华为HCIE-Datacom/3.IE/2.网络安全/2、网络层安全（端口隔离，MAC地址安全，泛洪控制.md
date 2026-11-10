@@ -80,17 +80,17 @@ MAC 漂移定义：**同一个 VLAN 里，同一个 MAC 地址被交换机从两
 
 **2.漂移检测+漂移处理**
 ```D
-[S3]mac-address flapping detection 配置全局MAC地址的漂移检测  
-[S3]mac-address flapping detection exclude vlan \<1-4094\> 排除部分VLAN不做MAC地址漂移检测  
+[S3]mac-address flapping detection 全局开启 MAC 地址漂移检测，整台交换机开始监控所有 VLAN 内的 MAC 是否来回漂移 
+[S3]mac-address flapping detection exclude vlan \<1-4094\> 排除某些 VLAN 不做漂移检测（比如 VRRP 主备切换的 VLAN，VRRP 切换本身是正常 MAC 漂移，不需要告警阻断）
 [S3]interface GigabitEthernet 0/0/2  
 [S3-GigabitEthernet0/0/2]mac-address flapping trigger 接口发生MAC地址漂移后的处理
-														error-down 接口shutdown  
-														quit-vlan 接口退出VLAN 
+														error-down 接口shutdown ，（端口逻辑关闭，端口 down 掉，所有 VLAN 全部断流），隔离环路
+														quit-vlan 接口退出VLAN ，其他 VLAN 不受影响（损伤更小，推荐多 VLAN 场景）
 ```
 
 
 ```D
-[S3]mac-address flapping quit-vlan recover-time \<0,1-1440\> 配置接口发生MAC地址漂移后，退出VLAN的自动恢复时间，默认10分钟  
+[S3]mac-address flapping quit-vlan recover-time \<0,1-1440\> 配置接口发生MAC地址漂移后，退出VLAN后的自动恢复时间，默认10分钟  
 [S3]error-down auto-recovery cause mac-address-flapping interval \<30-86400\> 设置漂移检测端口shutdown后的恢复时间
 ```
 ### **交换机流量：**  
