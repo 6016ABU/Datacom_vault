@@ -75,7 +75,7 @@
 [S3]interface GigabitEthernet 0/0/1  
 [S3-GigabitEthernet0/0/1]mac-learning priority 3  
 ```
-设置MAC地址学习的优先级值，默认值为0，优先级值越大越优先
+设置MAC地址学习的优先级值，默认值为0，优先级值越大越优先  
 MAC 漂移定义：**同一个 VLAN 里，同一个 MAC 地址被交换机从两个不同端口学到，MAC 表项不停覆盖、来回跳动**，大多是二层环路、仿冒 MAC 攻击导致，现象：网络时通时断、丢包、CPU 高。
 
 **2.漂移检测+漂移处理**
